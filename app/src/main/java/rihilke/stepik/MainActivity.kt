@@ -14,7 +14,11 @@ import rihilke.stepik.ui.theme.StepikTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        //гарантированно отработает при запуске приложения
         super.onCreate(savedInstanceState)
+        //здесь где-то сетконтент вызывает эксемельку с экраном. но где.
+        //а вот и не эксемелька, а тхеме.кт
+        // как экраны делать блять? Где эксемельки блиать?
         setContent {
             StepikTheme {
                 // A surface container using the 'background' color from the theme
@@ -26,6 +30,45 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    /*
+    * вызывается, когда приложение загрузило стартовый экран
+    * всё можно +- спокойно пихать в онрезюме.
+    * */
+    override fun onStart() {
+        super.onStart()
+    }
+
+    /*
+    * Когда экран стал активен, когда приложение действительно начало работать.
+    * Разница между онстарт и онрезюме есть, но нам пока не надо.
+    * */
+    override fun onResume() {
+        super.onResume()
+    }
+
+    /*
+    * Приложение, например, свернуто.
+    * После него приложение вполне может быть убито системой.
+    * */
+    override fun onPause() {
+        super.onPause()
+    }
+    /*
+    * Симметричен онСтарт. Не используется, потому что приложение могут убить в онПауз.
+    * */
+    override fun onStop() {
+        super.onStop()
+    }
+    /*
+    * Еще есть онРеСтарт, но он +- бесполезен.*/
+    /*
+    * онДестрой вызывается, когда "Экземпляр класса окончательно убивается системой и не будет
+    * возобновлен."
+    * Тут можно удалять закэшенное.*/
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
 
