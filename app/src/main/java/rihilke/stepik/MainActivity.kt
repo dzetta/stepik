@@ -1,6 +1,9 @@
 package rihilke.stepik
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +15,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import rihilke.stepik.ui.theme.StepikTheme
 
+/*
+* Все активити отдельны. Они ничего друг о друге не знают.
+* Есть только один способ передавать данные между экранами
+* ИНТЕНТ
+* */
 class MainActivity : ComponentActivity() {
+    //var val разница повторить
+    //переменная класса
+    lateinit var vText:TextView
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        /* .v сообщения
+        * .e эрроры
+        * */
+        Log.v("tag", "onCreate запустился" )
+
         //гарантированно отработает при запуске приложения
         super.onCreate(savedInstanceState)
         //здесь где-то сетконтент вызывает эксемельку с экраном. но где.
@@ -34,6 +51,34 @@ class MainActivity : ComponentActivity() {
 
          */
         setContentView(R.layout.activity_main)
+        //спец Дженерик???? функция
+        vText=findViewById<TextView>(R.id.btn_1_text)
+        //меняем цвет. не работает. я хз
+        //vText.setTextColor(0xFFFF00.toInt())
+        //обработчик нажатия
+        vText.setOnClickListener {
+            Log.v("click_tag", "нажата кнопа")
+            /* мы не можем влиять на активити напрямую
+            * сообщаем системе, что хотим активити через интент
+            * ВСЕ ДЕЛАЕТСЯ ЧЕРЕЗ ИНТЕНТ
+            * что такое :: ???
+            * */
+            val i = Intent(this, SecondActivity::class.java)
+            //почему tag1
+            //по именам данных tag1 ищутся данные в интентах
+            i.putExtra("tag1", vText.text)
+            // меняем startActivity(i) на
+            startActivityForResult(i,0)
+        }
+    }
+
+    // коды реквестов и результов - по ним можно различать кто что вернул
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(data!=null){
+            val str = data.getStringExtra("tag2")
+            vText.text = str
+        }
     }
 
     /*
@@ -75,7 +120,7 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
     }
 }
-/*
+/* От созданного по умолчанию.
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
@@ -83,7 +128,7 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         modifier = modifier
     )
 }
-
+/* как-то неизвестно пока превьюшка работает, но очень интересно*/
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
@@ -92,4 +137,4 @@ fun GreetingPreview() {
     }
 }
 
- */
+ конец от созданного по умолчанию. */

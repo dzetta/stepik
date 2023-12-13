@@ -8,7 +8,7 @@ import android.app.Application
 * Колбэки сообщают приложению, что с ним что-то случилось. и только
 * тут мы можем что-то делать.
 * */
-class App:Application() {
+class App : Application() {
     override fun onCreate() {
         //при создании (?) приложения, до загрузки экранов
         super.onCreate()
