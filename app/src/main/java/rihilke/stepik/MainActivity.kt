@@ -19,6 +19,7 @@ class MainActivity : ComponentActivity() {
         //здесь где-то сетконтент вызывает эксемельку с экраном. но где.
         //а вот и не эксемелька, а тхеме.кт
         // как экраны делать блять? Где эксемельки блиать?
+        /*
         setContent {
             StepikTheme {
                 // A surface container using the 'background' color from the theme
@@ -30,6 +31,9 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+         */
+        setContentView(R.layout.activity_main)
     }
 
     /*
@@ -71,7 +75,7 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
     }
 }
-
+/*
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
@@ -87,3 +91,5 @@ fun GreetingPreview() {
         Greeting("Android")
     }
 }
+
+ */
