@@ -1,6 +1,7 @@
 package rihilke.stepik
 
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
@@ -13,6 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.rxkotlin.zipWith
+import io.reactivex.schedulers.Schedulers
+import org.jetbrains.annotations.Async.Schedule
 import rihilke.stepik.ui.theme.StepikTheme
 
 /*
@@ -20,11 +27,18 @@ import rihilke.stepik.ui.theme.StepikTheme
 * Есть только один способ передавать данные между экранами
 * ИНТЕНТ
 * */
+/*
+* Главный поток - UI поток.
+* Если он висит больше 5 секунд, система предлагает убить приложение.
+* Система не дает исполнять сетевые запросы в юай-потоке.
+* */
+@Suppress("UNREACHABLE_CODE")
 class MainActivity : ComponentActivity() {
     //var val разница повторить
     //переменная класса
     lateinit var vText:TextView
-
+    //что это диспосабле
+    var request:Disposable?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         /* .v сообщения
         * .e эрроры
@@ -68,12 +82,65 @@ class MainActivity : ComponentActivity() {
             //по именам данных tag1 ищутся данные в интентах
             i.putExtra("tag1", vText.text)
             // меняем startActivity(i) на
+            @Suppress("DEPRECATION")
             startActivityForResult(i,0)
         }
-    }
+
+        /* Тред для сетевого запроса
+        * удобно, эффективно
+        * нельзя делать много таких потоков.
+        * тоже слишком плохо, удаляем.
+        * */
+        /*
+        val t=object:Thread(){
+            override fun run() {
+                //TODO сетевой запрос
+                // передача в юи поток
+                this@MainActivity.runOnUiThread {
+
+                }
+            }
+        }
+        t.start()
+         */ //конец тоже слишком плохо
+        /*Спец. инструмент для потоков, который уже депрекатед.
+        * много жрет, может делать утечки памяти, когда пользователь уже закрыл приложение
+        * поэтому вынесем его в отдельный класс
+        object:AsyncTask<String, Int, String>(){
+            override fun doInBackground(vararg params: String?): String {
+                return ""
+            }
+
+            override fun onPostExecute(result: String?) {
+                super.onPostExecute(result)
+            }
+
+        }.execute()
+//AT(this).execute()
+        *
+         */
+        /*Реактивное. из io.reactivex
+        * здесь можно делать flatMap - последовательно несколько действий
+        * и zipWith - действия параллельно
+        * и map - обработка полученного
+        * */
+        val o = Observable.create<String>{
+            //net
+            it.onNext("test")
+        }.flatMap { Observable.create<String>{} }
+            .zipWith(Observable.create<String>{})
+            .map{ it.second+it.first}
+            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        //1 - пойдет в онНекст, 2 - на случай эррора
+        request = o.subscribe({},{
+            // здесь будут все ошибки из o
+        })
+
+    } //конец онкреате
 
     // коды реквестов и результов - по ним можно различать кто что вернул
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        @Suppress("DEPRECATION")
         super.onActivityResult(requestCode, resultCode, data)
         if(data!=null){
             val str = data.getStringExtra("tag2")
@@ -117,9 +184,27 @@ class MainActivity : ComponentActivity() {
     * возобновлен."
     * Тут можно удалять закэшенное.*/
     override fun onDestroy() {
+        //закрываем все запросы, ничего не остается жрать память
+        request?.dispose()
         super.onDestroy()
     }
 }
+
+//выносим асинхрТаск в отдельный класс. он всё равно депрекатед.
+// всё это слишком плохо. удаляем.
+/*
+class AT(val act:MainActivity):AsyncTask<String, Int, String>(){
+    override fun doInBackground(vararg params: String?): String {
+        return ""
+    }
+
+    override fun onPostExecute(result: String?) {
+        super.onPostExecute(result)
+    }
+
+}
+ */ //конец слишком плохо, удаляем.
+
 /* От созданного по умолчанию.
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {
