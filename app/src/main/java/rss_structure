@@ -1,0 +1,52 @@
+/*
+Структура Рамблер Новости
+*/
+val url_rambler =
+    "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fnews.rambler.ru%2Frss%2Fworld%2F"
+<channel>
+    <title>В мире — Рамблер/новости</title>
+    <link>https://news.rambler.ru</link>
+    <description>Все последние новости мира сегодня, аналитика событий в мире, мировые новости дня</description>
+    <language>ru</language>
+    <image>
+    <url>/static/news/i/favicon-news/favicon-96x96.png</url>
+    <title>Рамблер/новости</title>
+    <link>https://news.rambler.ru</link>
+    </image>
+        <item>
+            <guid isPermaLink="False">51958014</guid>
+            <title>На шпиле Нотр-Дама установили металлического петуха с христианскими реликвиями</title>
+            <link>https://news.rambler.ru/world/51958014-na-shpile-notr-dama-ustanovili-metallicheskogo-petuha-s-hristianskimi-relikviyami/</link>
+            <pdalink>https://news.rambler.ru/world/51958014-na-shpile-notr-dama-ustanovili-metallicheskogo-petuha-s-hristianskimi-relikviyami/</pdalink>
+            <pubDate>Sat, 16 Dec 2023 20:25:16 +0300</pubDate>
+            <description>Прежняя фигура сильно пострадала при пожаре 2019 года, который полностью уничтожил крышу собора Парижской Богоматери. Новый объект создан по проекту главного архитектора храма Филиппа Вильнёва.</description>
+            <category>В мире</category>
+            <enclosure description="" height="801" url="https://news.store.rambler.ru/img/486c46d659c290af702c95b0d18095ea" width="1200"/>
+            <author>Говорит Москва</author>
+        </item>
+
+val url_ria_novosti =
+    "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fria.ru%2Fexport%2Frss2%2Farchive%2Findex.xml"
+/* структура РИА Новости
+"items": [
+{
+    "title": "Ученые в США научились выявлять риск появления мыслей о суициде"
+    "pubDate": "2023-12-16 13:06:00"
+    "link": "https://ria.ru/20231216/ssha-1916209978.html"
+    "guid": "https://ria.ru/20231216/ssha-1916209978.html"
+    "author": ""
+    "thumbnail": ""
+    описания нет
+    "description": ""
+    "content": ""
+    "enclosure": {
+    картинки есть не всегда
+        "link": "https://cdnn21.img.ria.ru/images/07e7/0c/08/1914678343_0:0:3012:1695_600x0_80_0_0_c6e950cf8b3eeac767dabdbf36cdd063.jpg.webp"
+        "type": "image/jpeg"
+    }
+    "categories": [
+        "Лента новостей"
+    ]
+}
+
+ */
