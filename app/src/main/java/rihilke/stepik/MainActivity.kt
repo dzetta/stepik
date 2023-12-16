@@ -4,7 +4,12 @@ import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseAdapter
 import android.widget.LinearLayout
+import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -29,12 +34,14 @@ import java.net.URL
 
 class MainActivity : ComponentActivity() {
     lateinit var vList: LinearLayout
+    lateinit var vListView: ListView
     var request: Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.v("tag", "onCreate запустился")
-        vList = findViewById(R.id.act1_list)
+//        vList = findViewById(R.id.act1_list)
+        vListView = findViewById(R.id.act1_listView)
         // url rss, пропущенный через онлайн джейсонатор
         val url =
             "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fria.ru%2Fexport%2Frss2%2Farchive%2Findex.xml"
@@ -43,7 +50,8 @@ class MainActivity : ComponentActivity() {
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 
         request = o.subscribe({
-            showLinearLayout(it.items)
+//            showLinearLayout(it.items)
+              showListView(it.items)
         }, {
             Log.e("test", "", it)
         })
@@ -58,16 +66,42 @@ class MainActivity : ComponentActivity() {
             vList.addView(view)
         }
     }
+    fun showListView(feedList: ArrayList<FeedItem>){
+        vListView.adapter=Adapter(feedList)
+    }
+
+    class Adapter(val items: ArrayList<FeedItem>) : BaseAdapter(
+
+    ) {
+        override fun getCount(): Int {
+            return items.size
+        }
+
+        override fun getItem(position: Int): Any {
+            return items[position]
+        }
+
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
+        }
+
+        override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+            val inflater = LayoutInflater.from(parent!!.context)
+            val view = convertView ?: inflater.inflate(R.layout.list_item, parent, false)
+            val vTitle = view.findViewById<TextView>(R.id.item_title)
+            val item = getItem(position) as FeedItem
+            vTitle.text = item.title
+            return vTitle
+        }
+    }
 
     override fun onStart() {
         super.onStart()
     }
 
-
     override fun onResume() {
         super.onResume()
     }
-
 
     override fun onPause() {
         super.onPause()
@@ -81,7 +115,6 @@ class MainActivity : ComponentActivity() {
         super.onDestroy()
     }
 }
-
 
 /* структура джсона
 "items": [
