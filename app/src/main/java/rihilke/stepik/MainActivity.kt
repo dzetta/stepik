@@ -52,7 +52,6 @@ class MainActivity : ComponentActivity() {
         val o = createRequest(url)
             .map { Gson().fromJson(it, Feed::class.java) }
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-
         request = o.subscribe({
 //            showLinearLayout(it.items)
 //            showListView(it.items)
@@ -85,7 +84,6 @@ class MainActivity : ComponentActivity() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecHolder {
             val inflater = LayoutInflater.from(parent!!.context)
             val view = inflater.inflate(R.layout.list_item, parent, false)
-
             return RecHolder(view)
         }
 
@@ -171,6 +169,8 @@ class MainActivity : ComponentActivity() {
 "description": ""
 "content": ""
 "enclosure": {
+    "link": "https://cdnn21.img.ria.ru/images/07e7/0c/08/1914678343_0:0:3012:1695_600x0_80_0_0_c6e950cf8b3eeac767dabdbf36cdd063.jpg.webp"
+    "type": "image/jpeg"
 }
 "categories": [
 "Лента новостей"
