@@ -6,8 +6,6 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 fun createRequest(url:String) = Observable.create<String> {
-        //net
-        //it.onNext("test")
         /* сниппет * */
         val urlConnection = URL(url).openConnection() as HttpURLConnection
         try {

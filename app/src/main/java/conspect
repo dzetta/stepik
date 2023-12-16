@@ -1,0 +1,145 @@
+Все активити отдельны. Они ничего друг о друге не знают.
+Есть только один способ передавать данные между экранами
+ИНТЕНТ
+Главный поток - UI поток.
+Если он висит больше 5 секунд, система предлагает убить приложение.
+Система не дает исполнять сетевые запросы в юай-потоке.
+    //var val разница повторить
+    //переменная класса тоже повторить
+        //что это диспосабле
+Log. - логи хорошие, годные
+.v сообщения
+.e эрроры
+
+//гарантированно отработает при запуске приложения
+override fun onCreate(savedInstanceState: Bundle?) {
+
+вызвать ексемельку
+        //setContentView(R.layout.activity_main)
+
+//спец Дженерик???? функция
+//обработчик нажатия
+        vText.setOnClickListener {
+мы не можем влиять на активити напрямую
+сообщаем системе, что хотим активити через интент
+ВСЕ ДЕЛАЕТСЯ ЧЕРЕЗ ИНТЕНТ
+что такое :: ???
+
+        /* Тред для сетевого запроса
+        * удобно, эффективно
+        * нельзя делать много таких потоков.
+        * */
+        /*
+        val t=object:Thread(){
+            override fun run() {
+                //TODO сетевой запрос
+                // передача в юи поток
+                this@MainActivity.runOnUiThread {
+
+                }
+            }
+        }
+        t.start()
+        /*Спец. инструмент для потоков, который уже депрекатед.
+        * много жрет, может делать утечки памяти, когда пользователь уже закрыл приложение
+        * поэтому вынесем его в отдельный класс
+        object:AsyncTask<String, Int, String>(){
+            override fun doInBackground(vararg params: String?): String {
+                return ""
+            }
+
+            override fun onPostExecute(result: String?) {
+                super.onPostExecute(result)
+            }
+
+        }.execute()
+//AT(this).execute()
+        *
+         */
+
+val i = Intent(this, SecondActivity::class.java)
+            //по именам данных tag1 ищутся данные в интентах
+//            i.putExtra("tag1", vText.text)
+            // меняем startActivity(i) на
+ //           @Suppress("DEPRECATION")
+ //           startActivityForResult(i,0)
+//        }
+
+        // для интернета нужно запросить у оси разрешение на интернет в манифесте
+/*Реактивное. из io.reactivex
+            * здесь можно делать flatMap - последовательно несколько действий
+            * и zipWith - действия параллельно
+            * и map - обработка полученного
+            * */
+
+            /1 - пойдет в онНекст, 2 - на случай эррора
+                        request = o.subscribe({},{})
+
+    // коды реквестов и результов - по ним можно различать кто что вернул
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+/*
+    * вызывается, когда приложение загрузило стартовый экран
+    * всё можно +- спокойно пихать в онрезюме.
+    * */
+    override fun onStart() {
+        super.onStart()
+    }
+
+    /*
+    * Когда экран стал активен, когда приложение действительно начало работать.
+    * Разница между онстарт и онрезюме есть, но нам пока не надо.
+    * */
+    override fun onResume() {
+        super.onResume()
+    }
+
+    /*
+    * Приложение, например, свернуто.
+    * После него приложение вполне может быть убито системой.
+    * */
+    override fun onPause() {
+        super.onPause()
+    }
+    /*
+    * Симметричен онСтарт. Не используется, потому что приложение могут убить в онПауз.
+    * */
+    override fun onStop() {
+        super.onStop()
+    }
+    /*
+    * Еще есть онРеСтарт, но он +- бесполезен.*/
+    /*
+    * онДестрой вызывается, когда "Экземпляр класса окончательно убивается системой и не будет
+    * возобновлен."
+    * Тут можно удалять закэшенное.*/
+    override fun onDestroy() {
+        //закрываем все запросы, ничего не остается жрать память
+        request?.dispose()
+        super.onDestroy()
+    }
+}
+
+//выносим асинхрТаск в отдельный класс. он всё равно депрекатед.
+// всё это слишком плохо. удаляем.
+/*
+class AT(val act:MainActivity):AsyncTask<String, Int, String>(){
+    override fun doInBackground(vararg params: String?): String {
+        return ""
+    }
+
+    override fun onPostExecute(result: String?) {
+        super.onPostExecute(result)
+    }
+
+}
+ */ //конец слишком плохо, удаляем.
+
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+         @Suppress("DEPRECATION")
+         super.onActivityResult(requestCode, resultCode, data)
+         if(data!=null){
+             val str = data.getStringExtra("tag2")
+             vText.text = str
+         }
+     }
