@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -73,21 +74,21 @@ class MainActivity : ComponentActivity() {
         //меняем цвет. не работает. я хз
         //vText.setTextColor(0xFFFF00.toInt())
         //обработчик нажатия
-        vText.setOnClickListener {
+//        vText.setOnClickListener {
             Log.v("click_tag", "нажата кнопа")
             /* мы не можем влиять на активити напрямую
             * сообщаем системе, что хотим активити через интент
             * ВСЕ ДЕЛАЕТСЯ ЧЕРЕЗ ИНТЕНТ
             * что такое :: ???
             * */
-            val i = Intent(this, SecondActivity::class.java)
+//            val i = Intent(this, SecondActivity::class.java)
             //почему tag1
             //по именам данных tag1 ищутся данные в интентах
-            i.putExtra("tag1", vText.text)
+//            i.putExtra("tag1", vText.text)
             // меняем startActivity(i) на
-            @Suppress("DEPRECATION")
-            startActivityForResult(i,0)
-        }
+ //           @Suppress("DEPRECATION")
+ //           startActivityForResult(i,0)
+//        }
 
         /* Тред для сетевого запроса
         * удобно, эффективно
@@ -127,30 +128,22 @@ class MainActivity : ComponentActivity() {
         * и zipWith - действия параллельно
         * и map - обработка полученного
         * */
-        val o = Observable.create<String>{
-            //net
-            //it.onNext("test")
-            /* сниппет * */
-            val urlConnection = URL(url).openConnection() as HttpURLConnection
-            try {
-                urlConnection.connect()
-                if(urlConnection.responseCode != HttpURLConnection.HTTP_OK)
-                    it.onError(RuntimeException(urlConnection.responseMessage))
-                else {
-                    val str = urlConnection.inputStream.bufferedReader().readText()
-                    it.onNext(str)
-                }
-            } finally {
-                urlConnection.disconnect()
-            }
-            /*конец сниппета*/
-        }.flatMap { Observable.create<String>{} }
-            .zipWith(Observable.create<String>{})
-            .map{ it.second+it.first}
+        // url rss, пропущенный через джейсонатор
+        // для интернета нужно запросить у оси разрешение на интернет в манифесте
+        val url = "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fria.ru%2Fexport%2Frss2%2Farchive%2Findex.xml"
+        val o = createRequest(url)
+            //.flatMap { Observable.create<String>{} }
+            //.zipWith(Observable.create<String>{})
+            .map{ Gson().fromJson(it, Feed::class.java) }
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
         //1 - пойдет в онНекст, 2 - на случай эррора
-        request = o.subscribe({},{
+        request = o.subscribe({
+            for(item in it.items) {
+                Log.w("test", "title: ${item.title}")
+            }
+        },{
             // здесь будут все ошибки из o
+            Log.e("test", "", it)
         })
 
     } //конец онкреате
@@ -240,3 +233,23 @@ fun GreetingPreview() {
 }
 
  конец от созданного по умолчанию. */
+
+/* структура джсона
+"items": [
+{
+"title": "Ученые в США научились выявлять риск появления мыслей о суициде"
+"pubDate": "2023-12-16 13:06:00"
+"link": "https://ria.ru/20231216/ssha-1916209978.html"
+"guid": "https://ria.ru/20231216/ssha-1916209978.html"
+"author": ""
+"thumbnail": ""
+"description": ""
+"content": ""
+"enclosure": {
+}
+"categories": [
+"Лента новостей"
+]
+}
+
+ */
