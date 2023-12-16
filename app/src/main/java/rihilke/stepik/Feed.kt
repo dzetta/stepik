@@ -9,6 +9,8 @@ class Feed(
 class FeedItem(
     val title: String,
     val link: String,
+    //у РИА Новости описания нет
+    val description:String,
     val enclosure: Enclosure,
 )
 

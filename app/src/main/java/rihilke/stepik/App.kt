@@ -9,8 +9,8 @@ import android.app.Application
 * тут мы можем что-то делать.
 * */
 class App : Application() {
-    override fun onCreate() {
-        //при создании (?) приложения, до загрузки экранов
-        super.onCreate()
-    }
+	override fun onCreate() {
+		//при создании (?) приложения, до загрузки экранов
+		super.onCreate()
+	}
 }
