@@ -20,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -35,13 +37,15 @@ import java.net.URL
 class MainActivity : ComponentActivity() {
     lateinit var vList: LinearLayout
     lateinit var vListView: ListView
+    lateinit var vRecView: RecyclerView
     var request: Disposable? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         Log.v("tag", "onCreate запустился")
 //        vList = findViewById(R.id.act1_list)
-        vListView = findViewById(R.id.act1_listView)
+//        vListView = findViewById(R.id.act1_listView)
+        vRecView = findViewById(R.id.act1_recView)
         // url rss, пропущенный через онлайн джейсонатор
         val url =
             "https://api.rss2json.com/v1/api.json?rss_url=https%3A%2F%2Fria.ru%2Fexport%2Frss2%2Farchive%2Findex.xml"
@@ -51,7 +55,8 @@ class MainActivity : ComponentActivity() {
 
         request = o.subscribe({
 //            showLinearLayout(it.items)
-              showListView(it.items)
+//            showListView(it.items)
+            showRecView(it.items)
         }, {
             Log.e("test", "", it)
         })
@@ -66,8 +71,46 @@ class MainActivity : ComponentActivity() {
             vList.addView(view)
         }
     }
-    fun showListView(feedList: ArrayList<FeedItem>){
-        vListView.adapter=Adapter(feedList)
+
+    fun showListView(feedList: ArrayList<FeedItem>) {
+        vListView.adapter = Adapter(feedList)
+    }
+
+    fun showRecView(feedList: ArrayList<FeedItem>) {
+        vRecView.adapter = RecAdapter(feedList)
+        vRecView.layoutManager=LinearLayoutManager(this)
+    }
+
+    class RecAdapter(val items: ArrayList<FeedItem>) : RecyclerView.Adapter<RecHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecHolder {
+            val inflater = LayoutInflater.from(parent!!.context)
+            val view = inflater.inflate(R.layout.list_item, parent, false)
+
+            return RecHolder(view)
+        }
+
+        override fun getItemCount(): Int {
+            return items.size
+        }
+
+        override fun onBindViewHolder(holder: RecHolder, position: Int) {
+            val item = items[position] as FeedItem
+            holder?.bind(item)
+        }
+
+        override fun getItemViewType(position: Int): Int {
+            // для бесконечной ленты, например.
+            return super.getItemViewType(position)
+        }
+
+    }
+
+    class RecHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(item: FeedItem) {
+            val vTitle = itemView.findViewById<TextView>(R.id.item_title)
+            vTitle.text = item.title
+
+        }
     }
 
     class Adapter(val items: ArrayList<FeedItem>) : BaseAdapter(
