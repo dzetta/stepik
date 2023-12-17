@@ -1,8 +1,6 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
-	id ("kotlin-kapt")
-	id ("realm-android")
 }
 
 android {
@@ -32,11 +30,11 @@ android {
 		}
 	}
 	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
+		sourceCompatibility = JavaVersion.VERSION_1_8
+		targetCompatibility = JavaVersion.VERSION_1_8
 	}
 	kotlinOptions {
-		jvmTarget = "17"
+		jvmTarget = "1.8"
 	}
 	buildFeatures {
 		compose = true
@@ -55,7 +53,7 @@ dependencies {
 
 	implementation("androidx.core:core-ktx:1.12.0")
 	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-	implementation("androidx.activity:activity-compose:1.8.2")
+	implementation("androidx.activity:activity-compose:1.8.1")
 	implementation(platform("androidx.compose:compose-bom:2023.10.01"))
 	implementation("androidx.compose.ui:ui")
 	implementation("androidx.compose.ui:ui-graphics")
@@ -76,17 +74,10 @@ dependencies {
 	implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
 	implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
 
-	implementation("com.google.code.gson:gson:2.10.1")
+	implementation("com.google.code.gson:gson:2.8.2")
 
-	implementation("androidx.recyclerview:recyclerview:1.3.2")
+	implementation("androidx.recyclerview:recyclerview:1.2.1")
 
-	implementation("com.squareup.picasso:picasso:2.71828")
-
-	implementation("io.realm.kotlin:library-base:1.13.0")
-	implementation("io.realm.kotlin:library-sync:1.13.0")  // If using Device Sync
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")   // If using coroutines with the SDK
+	implementation("com.squareup.picasso:picasso:2.5.2")
 
 }
-
-
-

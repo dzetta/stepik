@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <!-- Само приложение и его настройки-->
     <!-- запрос разрешения на интернет-->
-    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -18,9 +18,8 @@
         <!-- экраны-->
         <activity
             android:name=".MainActivity"
-
-            android:configChanges="orientation"
             android:exported="true"
+            android:label="@string/app_name"
             android:theme="@style/Theme.Stepik">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +28,7 @@
             </intent-filter>
         </activity>
         <!-- второй экран-->
-        <!--        <activity android:name="rihilke.stepik.SecondActivity" />-->
+        <activity android:name="rihilke.stepik.SecondActivity" />
     </application>
 
 </manifest>
