@@ -1,16 +1,22 @@
 package rihilke.stepik
 
 import android.app.Application
+import io.realm.kotlin.RealmConfiguration
+import io.realm.kotlin.types.TypedRealmObject
+import kotlin.reflect.KClass
 
-/*
-* все активити система андроида создает сама, когда она этого хочет
-* нам остаются только колбэки.
-* Колбэки сообщают приложению, что с ним что-то случилось. и только
-* тут мы можем что-то делать.
-* */
+
 class App : Application() {
-	override fun onCreate() {
-		//при создании (?) приложения, до загрузки экранов
-		super.onCreate()
-	}
+    override fun onCreate() {
+        //при создании (?) приложения, до загрузки экранов
+        super.onCreate()
+        val config = RealmConfiguration.create(
+            schema = setOf(
+                Feed::class,
+                FeedItem::class,
+                Enclosure::class,
+            )
+        )
+        val realm: io.realm.kotlin.Realm = io.realm.kotlin.Realm.open(config)
+    }
 }

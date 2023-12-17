@@ -1,6 +1,8 @@
 plugins {
 	id("com.android.application")
 	id("org.jetbrains.kotlin.android")
+	id ("kotlin-kapt")
+	id ("realm-android")
 }
 
 android {
@@ -30,11 +32,11 @@ android {
 		}
 	}
 	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_1_8
-		targetCompatibility = JavaVersion.VERSION_1_8
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 	kotlinOptions {
-		jvmTarget = "1.8"
+		jvmTarget = "17"
 	}
 	buildFeatures {
 		compose = true
@@ -80,4 +82,11 @@ dependencies {
 
 	implementation("com.squareup.picasso:picasso:2.5.2")
 
+	implementation("io.realm.kotlin:library-base:1.13.0")
+	implementation("io.realm.kotlin:library-sync:1.11.0")  // If using Device Sync
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0")   // If using coroutines with the SDK
+
 }
+
+
+
