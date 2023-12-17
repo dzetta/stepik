@@ -30,7 +30,7 @@ open class FeedItem(
     var link: String = "",
     //у РИА Новости описание пустое
     var description: String = "",
-    var enclosure: Enclosure = Enclosure(),
+    var enclosure: Enclosure = Enclosure("", ""),
 ) : RealmObject()
 
 open class Enclosure(

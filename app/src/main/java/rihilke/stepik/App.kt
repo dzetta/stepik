@@ -12,9 +12,11 @@ class App : Application() {
         super.onCreate()
         val config = RealmConfiguration.create(
             schema = setOf(
-                Feed::class,
-                FeedItem::class,
-                Enclosure::class,
+                setOf(
+                    Feed::class,
+                    FeedItem::class,
+                    Enclosure::class,
+                ) as KClass<TypedRealmObject>
             )
         )
         val realm: io.realm.kotlin.Realm = io.realm.kotlin.Realm.open(config)
